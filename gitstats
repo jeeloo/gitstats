@@ -197,6 +197,7 @@ class DataCollector:
 	# This should be the main function to extract data from the repository.
 	def collect(self, dir):
 		self.dir = dir
+		self.branchname = getpipeoutput(['git rev-parse --abbrev-ref HEAD'])
 		if len(conf['project_name']) == 0:
 			self.projectname = os.path.basename(os.path.abspath(dir))
 		else:
@@ -756,6 +757,7 @@ class HTMLReportCreator(ReportCreator):
 
 		f.write('<dl>')
 		f.write('<dt>Project name</dt><dd>%s</dd>' % (data.projectname))
+		f.write('<dt>Branch name</dt><dd>%s</dd>' % (data.branchname))
 		f.write('<dt>Generated</dt><dd>%s (in %d seconds)</dd>' % (datetime.datetime.now().strftime(format), time.time() - data.getStampCreated()))
 		f.write('<dt>Generator</dt><dd><a href="http://gitstats.sourceforge.net/">GitStats</a> (version %s), %s, %s</dd>' % (getversion(), getgitversion(), getgnuplotversion()))
 		f.write('<dt>Report Period</dt><dd>%s to %s</dd>' % (data.getFirstCommitDate().strftime(format), data.getLastCommitDate().strftime(format)))
